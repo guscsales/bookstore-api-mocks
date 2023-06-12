@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "3d4f7526-06dc-40f5-8108-0c1c6675eb6b",
+		"name": "Bookstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18825863"
+	},
+	"item": [
+		{
+			"name": "Fetch Livros",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/livros?limit=10&page=0",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "q",
+							"value": "meu",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Autores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/autores?limit=50&page=0&q=",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"autores"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "50"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "q",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Autores Livros",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/autores/721127088554637/livros",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"autores",
+						"721127088554637",
+						"livros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Categorias",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/categorias",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"categorias"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "whenever",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Editoras",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/editoras?q=&limit=5&page=1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"editoras"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": ""
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Livro",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titulo\": \"Meu titulo\",\n    \"isbn\": \"000-82-85891-6\",\n    \"paginas\": 100,\n    \"ano\": 2023,\n    \"categoriaId\": \"860913324397843\",\n    \"editoraId\": \"551040974594994\",\n    \"autorId\": \"392260043595405\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/livros",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Autor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Gustavo Sales\",\n    \"email\": \"gustavo@fiap.com.br\",\n    \"telefone\": \"11912345678\",\n    \"bio\": \"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore placeat eos, expedita natus assumenda fuga velit similique deleniti accusantium ipsum, harum aspernatur tenetur saepe officia non rerum totam rem. Quod.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/autores",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"autores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Livro",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titulo\": \"Meu titulo\",\n    \"isbn\": \"000-82-85891-6\",\n    \"paginas\": 100,\n    \"ano\": 2023,\n    \"categoriaId\": \"777877709805127\",\n    \"editoraId\": \"63591087839997\",\n    \"autorId\": \"515654967521243\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/livros/730951719544250",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros",
+						"730951719544250"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Autor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Gustavo Sales Santos\",\n    \"email\": \"gustavo@fiap.com.br\",\n    \"telefone\": \"11912345678\",\n    \"bio\": \"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore placeat eos, expedita natus assumenda fuga velit similique deleniti accusantium ipsum, harum aspernatur tenetur saepe officia non rerum totam rem. Quod.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/autores/91332713483443",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"autores",
+						"91332713483443"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Livro",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/livros/480857237821658",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros",
+						"480857237821658"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Autor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/livros/480857237821658",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros",
+						"480857237821658"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Livro By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/livros/134535712505789",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"livros",
+						"134535712505789"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
