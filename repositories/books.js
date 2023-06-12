@@ -30,6 +30,11 @@ function generateBook() {
       .toString()
       .padStart(5, '0')}`,
     ano: faker.date.past().getFullYear(),
+    capa: faker.image.urlLoremFlickr({
+      width: 1080,
+      height: 1920,
+      category: 'book,cover',
+    }),
     categoria:
       defaultCategories[
         faker.number.int({ min: 0, max: defaultCategories.length - 1 })
@@ -71,6 +76,7 @@ const bookSchema = z.object({
       },
       { message: 'Invalid year' }
     ),
+  capa: z.string().url(),
   categoriaId: z.string(),
   editoraId: z.string(),
   autorId: z.string(),
@@ -112,3 +118,59 @@ function createBook(
   return data;
 }
 module.exports.createBook = createBook;
+
+const updateBookSchema = bookSchema.extend({
+  id: z.string(),
+});
+module.exports.updateBookSchema = updateBookSchema;
+
+function updateBook(
+  db,
+  id,
+  { titulo, isbn, paginas, ano, categoriaId, editoraId, autorId }
+) {
+  const items = db.get(tableName) || [];
+
+  let data = {
+    id,
+    titulo,
+    isbn,
+    paginas,
+    ano,
+    categoria: getCategoryById(db, { id: categoriaId }),
+    editora: getPublisherById(db, { id: editoraId }),
+    autor: getAuthorById(db, { id: autorId }),
+  };
+
+  db.set(
+    tableName,
+    items.map((item) => {
+      if (item.id === id) {
+        data = { ...item, ...data };
+        return data;
+      }
+
+      return item;
+    })
+  );
+
+  return data;
+}
+module.exports.updateBook = updateBook;
+
+const deleteBookSchema = z.object({
+  id: z.string(),
+});
+module.exports.deleteBookSchema = deleteBookSchema;
+
+function deleteBook(db, id) {
+  const items = db.get(tableName) || [];
+
+  db.set(
+    tableName,
+    items.filter((item) => {
+      return item.id !== id;
+    })
+  );
+}
+module.exports.deleteBook = deleteBook;

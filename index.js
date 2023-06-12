@@ -2,8 +2,25 @@ const express = require('express');
 const NodeCache = require('node-cache');
 const normalizeString = require('./helpers/normalize-string');
 const bodyParser = require('body-parser');
-const { createBook, getBooks, bookSchema } = require('./repositories/books');
-const { getAuthors } = require('./repositories/authors');
+const {
+  createBook,
+  getBooks,
+  bookSchema,
+  updateBook,
+  updateBookSchema,
+  deleteBook,
+  deleteBookSchema,
+} = require('./repositories/books');
+const {
+  getAuthors,
+  getAuthorBooks,
+  authorSchema,
+  updateAuthorSchema,
+  deleteAuthorSchema,
+  createAuthor,
+  updateAuthor,
+  deleteAuthor,
+} = require('./repositories/authors');
 const { getCategories } = require('./repositories/categories');
 const { getPublishers } = require('./repositories/publishers');
 
@@ -16,18 +33,6 @@ app.use(bodyParser.json());
 require('./repositories/init')(db);
 
 // LIVROS
-app.get('/livros/:id', (req, res) => {
-  const bookId = req.params.id || '';
-
-  const book = getBooks(db).find((book) => book.id === bookId);
-
-  if (!book) {
-    return res.sendStatus(404);
-  }
-
-  return res.status(200).json(book);
-});
-
 app.get('/livros', (req, res) => {
   // Params
   const q = normalizeString(req.query.q || '');
@@ -66,6 +71,49 @@ app.post('/livros', (req, res) => {
   }
 });
 
+app.get('/livros/:id', (req, res) => {
+  const bookId = req.params.id || '';
+
+  const book = getBooks(db).find((book) => book.id === bookId);
+
+  if (!book) {
+    return res.sendStatus(404);
+  }
+
+  return res.status(200).json(book);
+});
+
+app.put('/livros/:id', (req, res) => {
+  const bookId = req.params.id || '';
+  const payload = req.body;
+
+  try {
+    updateBookSchema.parse({ id: bookId, ...payload });
+
+    const data = updateBook(db, bookId, payload);
+
+    return res.status(200).json(data);
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
+});
+
+app.delete('/livros/:id', (req, res) => {
+  const bookId = req.params.id || '';
+
+  try {
+    deleteBookSchema.parse({ id: bookId });
+
+    deleteBook(db, bookId);
+
+    return res.status(200).send('');
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
+});
+
 // AUTORES
 app.get('/autores', (req, res) => {
   // Params
@@ -82,6 +130,72 @@ app.get('/autores', (req, res) => {
   return res
     .status(200)
     .json({ total: authors.length, count: items.length, items });
+});
+
+app.get('/autores/:id/livros', (req, res) => {
+  const authorId = req.params.id || '';
+
+  const items = getAuthorBooks(db, { id: authorId });
+
+  return res.status(200).json({ total: items.length, items });
+});
+
+app.post('/autores', (req, res) => {
+  const payload = req.body;
+
+  try {
+    authorSchema.parse(payload);
+
+    const data = createAuthor(db, payload);
+
+    return res.status(200).json(data);
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
+});
+
+app.get('/autores/:id', (req, res) => {
+  const authorId = req.params.id || '';
+
+  const book = getAuthors(db).find((book) => book.id === authorId);
+
+  if (!book) {
+    return res.sendStatus(404);
+  }
+
+  return res.status(200).json(book);
+});
+
+app.put('/autores/:id', (req, res) => {
+  const authorId = req.params.id || '';
+  const payload = req.body;
+
+  try {
+    updateAuthorSchema.parse({ id: authorId, ...payload });
+
+    const data = updateAuthor(db, authorId, payload);
+
+    return res.status(200).json(data);
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
+});
+
+app.delete('/autores/:id', (req, res) => {
+  const authorId = req.params.id || '';
+
+  try {
+    deleteAuthorSchema.parse({ id: authorId });
+
+    deleteAuthor(db, authorId);
+
+    return res.status(200).send('');
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
 });
 
 // CATEGORIAS
@@ -112,7 +226,7 @@ app.get('/editoras', (req, res) => {
 
   return res
     .status(200)
-    .json({ total: publishers.length, count: items.length, items });
+    .json({ total: items.length, count: items.length, items });
 });
 
 app.listen(port, () => {
