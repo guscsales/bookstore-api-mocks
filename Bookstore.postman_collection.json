@@ -7,6 +7,60 @@
 	},
 	"item": [
 		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"admin+2@livraria.com.br\",\n    \"senha\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"admin+2@livraria.com.br\",\n    \"senha\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Fetch Livros",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -280,13 +334,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/livros/480857237821658",
+					"raw": "{{baseURL}}/autores/91332713483443",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"livros",
-						"480857237821658"
+						"autores",
+						"91332713483443"
 					]
 				}
 			},
