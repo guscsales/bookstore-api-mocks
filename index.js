@@ -2,6 +2,7 @@ const express = require('express');
 const NodeCache = require('node-cache');
 const normalizeString = require('./helpers/normalize-string');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 const {
   createBook,
   getBooks,
@@ -23,6 +24,11 @@ const {
 } = require('./repositories/authors');
 const { getCategories } = require('./repositories/categories');
 const { getPublishers } = require('./repositories/publishers');
+const {
+  userSchema,
+  createUser,
+  getUserByEmailAndPassword,
+} = require('./repositories/users');
 
 const app = express();
 const port = 3000;
@@ -227,6 +233,51 @@ app.get('/editoras', (req, res) => {
   return res
     .status(200)
     .json({ total: items.length, count: items.length, items });
+});
+
+// LOGIN
+app.post('/auth/login', (req, res) => {
+  const payload = req.body;
+
+  try {
+    userSchema.parse(payload);
+
+    const data = getUserByEmailAndPassword(db, payload);
+
+    if (!data) {
+      return res.status(403).json({ error: 'Email ou senha inválidos' });
+    }
+
+    const token = jwt.sign(data, 'mock-for-secret-key', { expiresIn: '1d' });
+    const { exp } = jwt.verify(token, 'mock-for-secret-key');
+
+    return res.status(200).json({ token, exp });
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
+});
+
+app.post('/auth/signup', (req, res) => {
+  const payload = req.body;
+
+  try {
+    userSchema.parse(payload);
+
+    const data = createUser(db, payload);
+
+    if (data.error) {
+      return res.status(409).json(data);
+    }
+
+    const token = jwt.sign(data, 'mock-for-secret-key', { expiresIn: '1d' });
+    const { exp } = jwt.verify(token, 'mock-for-secret-key');
+
+    return res.status(200).json({ token, exp });
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({ errors: JSON.parse(e.message) });
+  }
 });
 
 app.listen(port, () => {

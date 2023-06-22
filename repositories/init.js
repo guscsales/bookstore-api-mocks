@@ -3,4 +3,5 @@ module.exports = (db) => {
   require('./categories')(db);
   require('./publishers')(db);
   require('./books')(db);
+  require('./users')(db);
 };
