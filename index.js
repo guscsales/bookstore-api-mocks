@@ -3,6 +3,7 @@ const NodeCache = require('node-cache');
 const normalizeString = require('./helpers/normalize-string');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const {
   createBook,
   getBooks,
@@ -35,6 +36,7 @@ const port = 3000;
 const db = new NodeCache();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 require('./repositories/init')(db);
 
